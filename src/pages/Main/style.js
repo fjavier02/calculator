@@ -49,6 +49,7 @@ export const Panel = styled.div`
     width: 290px;
     position: relative;
     bottom: -10%;
+    text-align: center;
 
 
 `;
