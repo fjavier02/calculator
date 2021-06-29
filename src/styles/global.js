@@ -15,24 +15,17 @@ export default createGlobalStyle`
   }
 
   html, body, #root{
-    height: 100%;
+    //height: 100%;
   }
 
   body{
-    background: #f6f7fb;
+    //background-color: #16171d;
     -webkit-font-smoothing: antialiased;
   }
 
   body, input, button{
     font-family: 'Roboto', sans-serif;
-  }
-
-  a{
-    text-decoration: none;
-  }
-
-  ul{
-    list-style:none;
+    background: #c9c9c9;
   }
 
   button{

@@ -1,5 +1,6 @@
 import React from 'react';
-import Btn from '../../components/Btn'
+import Btn from '../../components/Btn';
+import ModeDark from '../../components/ModeDark';
 import  { Container, Wrapper, Screen, Total, Equal, Panel } from './style';
 
 class Main extends React.Component {
@@ -11,27 +12,25 @@ class Main extends React.Component {
               ['AC' , 'btn light-gray', 'reset' ],
               ['+/-', 'btn', 'minusPlus' ],
               ['%', 'btn', 'percent' ],
-              ['÷', 'operador', 'operatorType'],
+              ['/', 'operador', 'inputNum'],
               [ 7 , 'btn', 'inputNum'],
               [ 8 , 'btn', 'inputNum'],
               [ 9 , 'btn', 'inputNum'],
-              ['x', 'operador', 'operatorType'],
+              ['*', 'operador', 'inputNum'],
               [ 4 , 'btn', 'inputNum'],
               [ 5 , 'btn', 'inputNum'],
               [ 6 , 'btn', 'inputNum'],
-              ['-', 'operador', 'operatorType'],
+              ['-', 'operador', 'inputNum'],
               [ 1 , 'btn', 'inputNum'],
               [ 2 , 'btn', 'inputNum'],
               [ 3 , 'btn', 'inputNum'],
-              ['+', 'operador', 'operatorType'],
+              ['+', 'operador', 'inputNum'],
               [ 0 , 'btn zero', 'inputNum'],
               ['.', 'btn', 'inputNum'],
               ['=', 'purple', 'equals'],
         ],
-        input1: '',
-        input2: '',
-        input3: '',
-        total: '',
+        input1: [],
+        total: [],
         }
       }
 
@@ -39,77 +38,94 @@ class Main extends React.Component {
   }
 
   operator(fun, value){
-      var result = '200+30.5';
-      //eval(result)
+
+    var funciones = { 
+
+      reset: ()=>{
+        var reset = this.state.data;
+        reset.input1=[];
+        reset.total=[];
+        this.setState({data:reset})
+      },
+
+      minusPlus: ()=>{
+        var minusPlus = this.state.data;
+        minusPlus.total=[((Number(minusPlus.total.join('')))*-1)];
+        this.setState({data:minusPlus})
       
-          try {
-              return (console.log(eval(result)));
+      },
+      
+      percent: ()=>{
+        var percent = this.state.data;
+        percent.total=[((Number(percent.total.join(''))/100))];
+        this.setState({data:percent})      
+      },
+      
+      inputNum: (value)=>{
+        var total = this.state.data;
+        console.log(total.total.length)
+          if(total.total.length===9){
+            this.setState({data:total})
+          }else{
+            if(total.total[0]==="Error"){
+              total.total=[];
+              total.input1=[];
+              this.setState({data:total})
             }
-          catch(err) {
-              return (console.log('error'));
+            total.total.push(value)
+            this.setState({data:total})
           }
-      //console.log(fun,value);
+      },
       
-  }
+      equals: ()=>{
+        var equal = this.state.data;
+        equal.input1=equal.total;
+        try {
+          equal.total=[eval(equal.total.join('').toString())];
+          this.setState({data:equal})
+        }
+        catch(err) {
+            equal.total=['Error'];
+            this.setState({data:equal})
+        }
 
-  reset(){
-      var reset = this.state.data;
-      reset.input1=0;
-      reset.input2=0;
-      reset.input3=0;
-      reset.total=0;
-      this.setState({data:reset})
-  }
-
-  minusPlus(){
-      var minusPlus = this.state.data;
-
-  }
-
-  percent(){
-      var percent = this.state.data;        
-      
-      if(this.state.input2 === 0){
-          percent = this.state.data;
-          percent.input1=0;
-          percent.input2=0;
-          percent.input3=0;
-          percent.total=0;
-          this.setState({data:percent})
       }
+    }
+      switch (fun) {
+        case 'inputNum':
+            funciones.inputNum(value);
+          break;
+        case 'equals':
+          funciones.equals();
+          break;
+        case 'reset':
+          funciones.reset();
+          break;
+        case 'minusPlus':
+          funciones.minusPlus();
+          break;
+        case 'percent':
+          funciones.percent();
+          break;
+
+        default:
+          break;
+      };
       
-      percent = this.state.data;
-      percent.total = (percent.input1/100)*percent.input2;
-      this.setState({data:percent})
-      
   }
-
-  operatorType(){
-      
-      console.log('operatorType');
-  }
-
-  inputNum(){
-      console.log('inputNum');
-  }
-
-  equals(){
-      console.log('equals');
-  }
-
-  
-
 
   render() {
     return (
       <Container>
+        <ModeDark></ModeDark>
         <Wrapper>
+        
           <Screen>
             <Total>
-             195
+             {this.state.data.total}
             </Total>
             <Equal>
-              125+80-10  
+            {this.state.data.input1}
             </Equal>
           </Screen>
           <Panel>
